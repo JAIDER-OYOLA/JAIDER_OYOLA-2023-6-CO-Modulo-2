@@ -4,7 +4,7 @@ class BulletManager:
     def __init__(self):
         self.bullets = []
         self.enemy_bullets = []
-    ##actualizar las balas
+
     def update(self, game):
         for bullet in self.enemy_bullets:
             bullet.update(self.enemy_bullets)
@@ -17,27 +17,24 @@ class BulletManager:
 
         for bullet in self.bullets:
             bullet.update(self.bullets)
-            
-            for enemy in game.enemy_manager.enemies:
-                if bullet.rect.colliderect(enemy) and bullet.owner == 'player':
-                    game.enemy_manager.enemies.remove(enemy)
-                
-                
-    ##dibujar las balas
-    def draw(self, screen):
 
+            for enemy in game.enemy_manager.enemies:
+                if pygame.sprite.collide_rect(bullet, enemy) and bullet.owner == 'player':
+                    bullet.spaceship.score += 1
+                    game.enemy_manager.enemies.remove(enemy)
+                    self.bullets.remove(bullet)
+                    break
+
+    def draw(self, screen):
         for bullet in self.enemy_bullets:
             bullet.draw(screen)
-        
+
         for bullet in self.bullets:
             bullet.draw(screen)
 
-
-
-    ##Agregar las balas
     def add_bullet(self, bullet):
         if bullet.owner == "enemy" and len(self.enemy_bullets) < 4:
             self.enemy_bullets.append(bullet)
 
-        if bullet.owner == "player" :
+        if bullet.owner == "player":
             self.bullets.append(bullet)

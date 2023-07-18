@@ -18,8 +18,9 @@ class Spaceship(Sprite):
         self.name = name  # Nuevo atributo para almacenar el nombre del jugador
         self.type = 'player'
         self.shooting_time = 0
+        self.score = 0
 
-    def update(self, user_input, game):
+    def update(self, user_input, game, enemies):
         if user_input[pygame.K_LEFT]:
             self.move_left()
         if user_input[pygame.K_RIGHT]:
@@ -30,7 +31,6 @@ class Spaceship(Sprite):
             self.move_down()
         if user_input[pygame.K_SPACE]:
             self.shooting_sp(game)
-        
 
     def move_left(self):
         if self.rect.left > 0:
@@ -58,8 +58,16 @@ class Spaceship(Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
+
         font = pygame.font.Font(None, 24)
-        text = font.render(self.name, True, (255, 255, 255))
-        text_rect = text.get_rect()
-        text_rect.topright = (self.rect.right + 50, self.rect.top)  # Ajuste de posición superior derecha
-        screen.blit(text, text_rect)
+        name_text = font.render(self.name, True, (255, 255, 255))
+        score_text = font.render(f"Score: {self.score}", True, (255, 255, 255))
+
+        name_rect = name_text.get_rect()
+        score_rect = score_text.get_rect()
+
+        name_rect.topright = (self.rect.right + 50, self.rect.top)
+        score_rect.topright = (self.rect.right + 65, self.rect.top + 25)  # Ajusta la posición del score debajo del nombre
+    
+        screen.blit(name_text, name_rect)
+        screen.blit(score_text, score_rect)

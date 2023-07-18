@@ -45,7 +45,6 @@ class Enemy(Sprite):
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
         
-        # Dibujar el nombre del enemigo a la derecha
         font = pygame.font.Font(None, 24)
         text = font.render(self.name, True, (255, 255, 255))
         text_rect = text.get_rect()

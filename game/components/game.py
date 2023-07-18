@@ -48,7 +48,7 @@ class Game:
     # si tienes un spaceship; el spaceship deberia tener un "update" method que llamamos desde aqui
     def update(self):
         user_input = pygame.key.get_pressed()
-        self.player.update(user_input,self)
+        self.player.update(user_input, self, self.enemy_manager.enemies)
         self.enemy_manager.update()
         self.bullet_manager.update(self)
 
