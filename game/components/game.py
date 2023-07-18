@@ -5,6 +5,7 @@ import pygame
 from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 from game.components.spaceship import Spaceship
 from game.components.enemies.enemy_manager import EnemyManager
+from game.components.bullets.bullet_manager import BulletManager
 # Game es la definicion de la clase (plantilla o molde para sacar objetos)
 # self es una referencia que indica que el metodo o el atributo es de cada "objeto" de la clase Game
 class Game:
@@ -20,6 +21,7 @@ class Game:
         self.y_pos_bg = 0
         self.player = Spaceship("xwing")
         self.enemy_manager = EnemyManager()
+        self.bullet_manager = BulletManager()
 
     # este es el "game loop"
     # # Game loop: events - update - draw
@@ -46,8 +48,9 @@ class Game:
     # si tienes un spaceship; el spaceship deberia tener un "update" method que llamamos desde aqui
     def update(self):
         user_input = pygame.key.get_pressed()
-        self.player.update(user_input)
+        self.player.update(user_input,self)
         self.enemy_manager.update()
+        self.bullet_manager.update(self)
 
     # este metodo "dibuja o renderiza o refresca mis cambios en la pantalla del juego"
     # aca escribo ALGO de la logica "necesaria" -> repartimos responsabilidades entre clases
@@ -59,6 +62,7 @@ class Game:
         self.draw_background()
         self.player.draw(self.screen)
         self.enemy_manager.draw(self.screen)
+        self.bullet_manager.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 

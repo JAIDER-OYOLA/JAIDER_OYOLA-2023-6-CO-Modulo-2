@@ -3,6 +3,7 @@ from pygame.sprite import Sprite
 import pygame
 
 from game.utils.constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from game.components.bullets.bullet import Bullet
 
 class Enemy(Sprite):
     Y_POS = 20
@@ -61,3 +62,10 @@ class Enemy(Sprite):
         
         if self.index >= self.movement_x_for:
             self.index = 0
+
+    def shoot(self, bullet_manager):
+        current_time = pygame.time.get_ticks()
+        if self.shooting_time <= current_time:
+            bullet = Bullet(self)
+            bullet_manager.add_bullet(bullet)
+            self.shooting_time += random.randint(20, 50)
