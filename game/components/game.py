@@ -6,6 +6,8 @@ from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, F
 from game.components.spaceship import Spaceship
 from game.components.enemies.enemy_manager import EnemyManager
 from game.components.bullets.bullet_manager import BulletManager
+from game.components.menu import Menu
+
 # Game es la definicion de la clase (plantilla o molde para sacar objetos)
 # self es una referencia que indica que el metodo o el atributo es de cada "objeto" de la clase Game
 class Game:
@@ -22,6 +24,42 @@ class Game:
         self.player = Spaceship("xwing")
         self.enemy_manager = EnemyManager()
         self.bullet_manager = BulletManager()
+        self.runing = False
+        self.menu = Menu('Press any key to start...', self.screen)
+        self.death_count = 0
+
+    def execute(self):
+        self.runing = True
+        while self.runing:
+            if not self.playing:
+                self.show_menu()  # Corregimos aquí, añadiendo los paréntesis ()
+        pygame.display.quit()
+        pygame.quit()
+
+    def execute(self):
+        self.runing = True
+        while self.runing:
+            if not self.playing:
+                self.show_menu()  # Corregimos aquí, añadiendo los paréntesis ()
+        pygame.display.quit()
+        pygame.quit()
+
+    def show_menu(self):
+        self.menu.reset_screen_color(self.screen)
+        half_screen_height = SCREEN_HEIGHT // 2
+        half_screen_width = SCREEN_WIDTH // 2
+        
+        if self.death_count == 0:
+            self.menu.draw(self.screen)
+        else:
+            self.menu.update_message('GAME OVER')
+            self.menu.draw(self.screen)
+
+        icon = pygame.transform.scale(ICON, (80, 120))
+        self.menu.draw(self.screen)
+        self.screen.blit(icon, (half_screen_width - 50, half_screen_height - 150))
+        self.menu.update(self)
+
 
     # este es el "game loop"
     # # Game loop: events - update - draw
@@ -34,8 +72,8 @@ class Game:
             self.draw()
         else:
             print(f"game is over because self.playing is", self.playing)
-        pygame.display.quit()
-        pygame.quit()
+        # pygame.display.quit()
+        # pygame.quit()
 
     def handle_events(self):
         # esta expression es la llamada a un metodo pygame.event.get() que devuelve un "iterable"
@@ -49,7 +87,7 @@ class Game:
     def update(self):
         user_input = pygame.key.get_pressed()
         self.player.update(user_input, self, self.enemy_manager.enemies)
-        self.enemy_manager.update()
+        self.enemy_manager.update(self)
         self.bullet_manager.update(self)
 
     # este metodo "dibuja o renderiza o refresca mis cambios en la pantalla del juego"

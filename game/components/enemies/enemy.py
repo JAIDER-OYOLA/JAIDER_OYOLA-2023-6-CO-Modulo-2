@@ -29,8 +29,9 @@ class Enemy(Sprite):
         self.index = 0 
         self.shooting_time = random.randint(30, 50)
         
-    def update(self, ships):
+    def update(self, ships, game):
         self.rect.y += self.speed_y
+        self.shoot(game.bullet_manager)
         
         if self.movement_x == 'left':
             self.rect.x -= self.speed_x 
